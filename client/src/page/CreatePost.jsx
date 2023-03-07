@@ -1,19 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+// import { format } from "date-fns";
+
+
 import { useNavigate } from "react-router-dom";
 
 import { preview } from "../assets";
 import { getRandomPrompt } from "../utils";
 import { FormField, Loader } from "../components";
 
-const CreatePost = () => {
+import Success from "../components/Success";
+import "./Post.css";
+
+const CreatePost = (props) => {
   const navigate = useNavigate();
+  console.log(props);
+
+  // const [currentDate, setCurrentDate] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const handleOk = () => {
+    setShowSuccess(false);
+    console.log(props);
+    // navigate("/");
+  };
+
+  // useEffect(() => {
+  //   setCurrentDate(format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+  // }, []);
 
   const [form, setForm] = useState({
-    name: '',
-    prompt: '',
-    photo: '',
+    name: "",
+    prompt: "",
+    photo: "",
   });
-
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -30,17 +49,17 @@ const CreatePost = () => {
       try {
         setGeneratingImg(true);
         const response = await fetch(
-          'https://dalle-interface.onrender.com/api/v1/dalle',
+          "https://dallehost.herokuapp.com/api/v1/dalle",
           {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              prompt: form.prompt
+              prompt: form.prompt,
             }),
           }
-        )
+        );
 
         const data = await response.json();
         setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
@@ -54,37 +73,38 @@ const CreatePost = () => {
       alert("Please provide proper prompt");
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (form.prompt && form.photo) {
+    if (form.prompt && form.photo && props.user) {
       setLoading(true);
       try {
+        const headers = {
+          "Content-Type": "application/json",
+        };
         const response = await fetch(
-          'https://dalle-interface.onrender.com/api/v1/posts',
+          "https://dallehost.herokuapp.com/api/v1/posts",
           {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(form),
+            method: "POST",
+            headers,
+            body: JSON.stringify({...form, token: props.user.credential}),
           }
         );
 
         await response.json();
-        alert("Success");
-        navigate("/");
+        setShowSuccess(true);
+        console.log("response", response, "form", form);
       } catch (err) {
         alert(err);
       } finally {
         setLoading(false);
       }
+    } else if (!props.user) {
+      alert("Please login to create a post");
     } else {
       alert("Please generate an image with proper details");
     }
   };
-
   return (
     <section className="max-w-7xl mx-auto">
       <div>
@@ -98,7 +118,7 @@ const CreatePost = () => {
       <form className="mt-16 max-w-3xl" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-5">
           <FormField
-            labelName="Your Name"
+            labelName="Display Name"
             type="text"
             name="name"
             placeholder="Ex., john doe"
@@ -139,11 +159,12 @@ const CreatePost = () => {
             )}
           </div>
         </div>
-
+        {/**() => navigate("/login")**/}
+        {showSuccess && <Success handleOk={handleOk} />}
         <div className="mt-5 flex gap-5">
           <button
             type="button"
-            onClick={generateImage}
+            onClick={props.user === null ? generateImage : generateImage}
             className=" text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
           >
             {generatingImg ? "Generating..." : "Generate"}

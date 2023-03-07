@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { Card, FormField, Loader } from '../components';
-
 const RenderCards = ({ data, title }) => {
   if (data?.length > 0) {
     return (
@@ -9,12 +8,14 @@ const RenderCards = ({ data, title }) => {
     );
   }
 
+  
+
   return (
     <h2 className="mt-5 font-bold text-[#6469ff] text-xl uppercase">{title}</h2>
   );
 };
 
-const Home = () => {
+const Home = (user) => {
   const [loading, setLoading] = useState(false);
   const [allPosts, setAllPosts] = useState(null);
 
@@ -26,7 +27,7 @@ const Home = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('https://dalle-interface.onrender.com/api/v1/posts', {
+      const response = await fetch('https://dallehost.herokuapp.com/api/v1/posts', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

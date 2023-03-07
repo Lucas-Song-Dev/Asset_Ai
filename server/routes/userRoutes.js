@@ -1,0 +1,71 @@
+import express from "express";
+import * as dotenv from "dotenv";
+import { OAuth2Client } from "google-auth-library";
+import User from "../mongodb/models/user.js";
+
+const router = express.Router();
+
+dotenv.config();
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+// Google Sign-In verification handler
+const verifyGoogleSignIn = async (token) => {
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    return payload ;
+  } catch (err) {
+    console.error(`Error verifying Google Sign-In: ${err}`);
+    return null;
+  }
+};
+
+// Route for creating a new user
+router.post("/signup", async (req, res) => {
+  const { token } = req.body;
+  const googleUser = await verifyGoogleSignIn(token);
+
+  if (!googleUser) {
+    return res.status(400).json({ message: "Invalid token" });
+  }
+  console.log(googleUser.email);
+  try {
+    let user = await User.findOne({ email: googleUser.email });
+    if (!user) {
+      user = await User.create({ email: googleUser.email });
+    }
+
+    return res.status(200).json({ message: "User created successfully" });
+  } catch (err) {
+    console.error(`Error creating user: ${err}`);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Route for getting user information
+router.get("/user", async (req, res) => {
+  const { token } = req.headers;
+  const googleUser = await verifyGoogleSignIn(token);
+
+  if (!googleUser) {
+    return res.status(400).json({ message: "Invalid token" });
+  }
+
+  try {
+    const user = await User.findOne({ email: googleUser.email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({ user });
+  } catch (err) {
+    console.error(`Error getting user information: ${err}`);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
+export default router;

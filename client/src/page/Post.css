@@ -1,0 +1,114 @@
+*{
+  box-sizing: border-box;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.titleHolder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem;
+}
+
+.titleHolder::before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 20%;
+  bottom: 0;
+  z-index: 0;
+}
+
+.itemDescription {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageHolder {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
+  width: 100%;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.itemImage {
+  grid-column: 2;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  border-radius: 5vw;
+}
+
+.itemImage::before {
+  content: "";
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: calc(100% + 50px);
+  height: calc(100% + 50px);
+  background-image: linear-gradient(
+    to top right,
+    #f00,
+    #ff0,
+    #0f0,
+    #0ff,
+    #00f,
+    #f0f,
+    #f00
+  );
+  background-size: 100% 100%;
+}
+
+.cardN {
+  position: absolute;
+  width: 50%;
+  height: 80%;
+  background: rgb(236, 236, 236);
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+ }
+ .cardN-holder{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+ }
+
+@media (max-width: 480px) {
+  .page {
+    padding: 0;
+  }
+
+  .title{
+    font-size: 1.5rem;
+    border-bottom: black solid 3px;
+    margin-bottom: 5px;
+    text-align: center;
+  }
+
+  .titleHolder {
+    flex-direction: column;
+  }
+}
