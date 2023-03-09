@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { download } from "../assets";
 import { downloadImage } from "../utils";
 
-const Card = ({ _id, name, prompt, photo }) => {
+const Card = ({ _id, name, prompt, photo, userImage }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -26,7 +26,11 @@ const Card = ({ _id, name, prompt, photo }) => {
         <div className="mt-5 flex justify-between items-center gap-2">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-full object-cover bg-green-700 flex justify-center items-center text-white text-xs font-bold">
-              {name[0]}
+              {userImage === "null" ? (
+                name[0].toUpperCase()
+              ) : (
+                <img className="mainProfileImage" src={userImage} alt={name} />
+              )}
             </div>
             <p className="text-white text-sm">{name}</p>
           </div>

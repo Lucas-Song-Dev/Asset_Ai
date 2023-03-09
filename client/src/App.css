@@ -47,6 +47,11 @@
   font-family: Inter var, sans-serif;
   box-shadow: 0px 0px 0px black;
 }
+.mainProfileImage{
+  position: relative;
+  border-radius: 50%;
+  
+}
 
 .read-the-docs {
   color: #888;

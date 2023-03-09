@@ -53,6 +53,7 @@ const App = () => {
 
   const handleLogout = () => {
     setUser(null);
+    Cookies.set("jwt", JSON.stringify(null), { expires: 0 }); // Set the cookie to expire after 7 days
   };
 
   return (
@@ -86,13 +87,13 @@ const App = () => {
         <div>
           <Link
             to="/create-post"
-            className="font-inter font-medium bg-[#6469ff] text-white px-4 py-2 rounded-md h-24"
+            className="font-inter font-medium bg-[#a65dd6] text-white px-4 py-2 rounded-md h-24"
           >
             Create
           </Link>
           <Link
             to="/account"
-            className="font-inter font-medium bg-[#6469ff] text-white px-4 py-2 rounded-md"
+            className="font-inter font-medium bg-[#a65dd6] text-white px-4 py-2 rounded-md"
             style={{ marginLeft: "10px" }}
           >
             Account

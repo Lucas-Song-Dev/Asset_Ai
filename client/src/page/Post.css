@@ -77,25 +77,6 @@
   background-size: 100% 100%;
 }
 
-.cardN {
-  position: absolute;
-  width: 50%;
-  height: 80%;
-  background: rgb(236, 236, 236);
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
- }
- .cardN-holder{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100vh;
-  margin-bottom: 1rem;
-  position: relative;
-  z-index: 1;
- }
-
 @media (max-width: 480px) {
   .page {
     padding: 0;

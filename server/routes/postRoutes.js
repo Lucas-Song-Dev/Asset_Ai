@@ -92,6 +92,7 @@ router.route("/").post(async (req, res) => {
       prompt,
       photo: photoUrl.url,
       email: googleUser.email,
+      userImage: googleUser.picture,
       user: user._id,
     });
     user.posts.push(newPost._id);

@@ -1,0 +1,200 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --main-color: #f9fafe; /* white */
+  --sub-color: #a65dd6; /* purple */
+}
+
+.acountHolder {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  background-color: var(--main-color);
+  border-radius: 1.175rem;
+  position: relative;
+  height: 100vh;
+  width: calc(100% + 4rem);
+  top: -2rem;
+  left: -2rem;
+  right: -2rem;
+}
+
+.userTitle{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  isolation: isolate;
+  padding-top: 4rem;
+}
+.userTitle::before{
+  position: absolute;
+  content: "";
+  height: 50%;
+  width: 100%;
+  z-index: -1;
+  left: 0;
+  top: 0;
+  background-color: var(--sub-color);
+}
+
+.profileImage{
+  border-radius: 50%;
+  width: 40%;
+  height: 40%;
+  padding-bottom: 0rem;
+  border: 3px solid var(--sub-color);
+}
+
+.card {
+  position: relative;
+  width: auto;
+  height: auto;
+  background: rgb(236, 236, 236);
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+
+  z-index: 2;
+}
+
+
+.sidebar {
+  background-color: var(--main-color);
+  height: fit-content;
+  width: 100%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  grid-column: 1;
+  border: var(--sub-color) 1px solid;
+  
+}
+
+.accountInfo {
+  position: relative;
+  grid-column: 2;
+  padding: 1rem;
+}
+
+
+.sidebar-section {
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+  width: 100%;
+}
+
+.sidebar-section > h3 {
+  font-size: 20px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.sidebar-section > ul {
+  font-size: 1.175rem;
+  transition: all 0.3s ease;
+  padding: 1rem 0rem;
+}
+
+.sidebar-section > h3:hover {
+  color: var(--sub-color);
+  border-bottom-color: var(--sub-color);
+}
+.subscribe {
+  position: absolute;
+  height: 170px;
+  width: 240px;
+  padding: 20px;
+  background-color: #FFF;
+  border-radius: 4px;
+  color: #333;
+  box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.4);
+}
+
+.subscribe:after {
+  position: absolute;
+  content: "";
+  right: -10px;
+  bottom: 18px;
+  width: 0;
+  height: 0;
+  border-left: 0px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid var(--sub-color);
+}
+
+.subscribe p {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 4px;
+  line-height: 28px;
+}
+
+.subscribe form{
+  position: absolute;
+  bottom: 10px;
+}
+
+.subscribe input {
+  position: relative;
+  border: none;
+  border-bottom: 1px solid #d4d4d4;
+  padding: 10px;
+  width: 82%;
+  background: transparent;
+  transition: all .25s ease;
+}
+
+.subscribe password{
+  position: relative;
+  border: none;
+  border-bottom: 1px solid #d4d4d4;
+  padding: 10px;
+  width: 82%;
+  background: transparent;
+  transition: all .25s ease;
+}
+
+.subscribe input:focus {
+  outline: none;
+  border-bottom: 1px solid var(--sub-color);
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', 'sans-serif';
+}
+
+.subscribe .submit-btn {
+  position: absolute;
+  border-radius: 30px;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  background-color: var(--sub-color);
+  color: #FFF;
+  padding: 12px 25px;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 5px;
+  right: -10px;
+  bottom: -20px;
+  cursor: pointer;
+  transition: all .25s ease;
+  box-shadow: -5px 6px 20px 0px rgba(26, 26, 26, 0.4);
+}
+
+.subscribe .submit-btn:hover {
+  background-color: var(--sub-color);
+  box-shadow: -5px 6px 20px 0px rgba(88, 88, 88, 0.569);
+}
+.signInHolder{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  isolation: isolate;
+  padding-top: 4rem;
+  height: 60vh;
+}
