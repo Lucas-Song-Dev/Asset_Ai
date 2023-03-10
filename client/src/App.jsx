@@ -2,8 +2,7 @@ import { React, useState, useEffect } from "react";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import Cookies from "js-cookie";
-import "./App.css"
-
+import "./App.css";
 
 import { logo } from "./assets";
 import { Home, CreatePost, Post, Account } from "./page";
@@ -38,7 +37,6 @@ const App = () => {
     // Assuming you have retrieved the JWT from the server and stored it in a variable called `jwt`
     console.log("user", user);
     Cookies.set("jwt", JSON.stringify(user), { expires: 7 }); // Set the cookie to expire after 7 days
-
   };
   useEffect(() => {
     if (jwt) {
@@ -74,6 +72,18 @@ const App = () => {
           </button>
         ) : (
           <GoogleLogin
+          theme="outline"
+          text="signin"
+          width="100px"
+            render={(renderProps) => (
+              <button
+                onClick={renderProps.onClick}
+                style={{ backgroundColor: "red", color: "white" }}
+              >
+                dqowijdoqwi
+                <i className="material-symbols-outlined">person</i>
+              </button>
+            )}
             onSuccess={(credentialResponse) => {
               console.log(credentialResponse);
               handleSetUser(credentialResponse);
@@ -82,21 +92,25 @@ const App = () => {
             onError={() => {
               console.log("Login Failed");
             }}
+            
+            shape="circle"
           />
         )}
-        <div>
+        <div className="flex">
           <Link
             to="/create-post"
-            className="font-inter font-medium bg-[#a65dd6] text-white px-4 py-2 rounded-md h-24"
+            className="font-inter font-medium bg-[#a65dd6] text-white px-4 py-2 rounded-md ml-2 flex-row flex h-fit"
           >
-            Create
+            <i className="material-symbols-outlined ">edit</i>
+            <span class="hidden xs:inline">Create</span>
           </Link>
           <Link
             to="/account"
-            className="font-inter font-medium bg-[#a65dd6] text-white px-4 py-2 rounded-md"
+            className="font-inter font-medium bg-[#a65dd6] text-white px-4 py-2 rounded-md flex"
             style={{ marginLeft: "10px" }}
           >
-            Account
+            <i className="material-symbols-outlined">person</i>
+            <span class="hidden xs:inline">Account</span>
           </Link>
         </div>
       </header>
