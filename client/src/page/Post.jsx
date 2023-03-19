@@ -42,7 +42,7 @@ const Post = (props) => {
       const data = await response.json();
       console.log(data); // log the response to check if the post was successfully deleted
       setShowDeleteConfirmation(false);
-      navigate("/");
+      navigate("/display-posts");
     } catch (error) {
       console.error(error);
     }

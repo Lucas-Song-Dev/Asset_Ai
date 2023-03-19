@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import "./App.css";
 
 import { logo } from "./assets";
-import { Home, CreatePost, Post, Account } from "./page";
+import { Home, CreatePost, Post, Account, Display } from "./page";
 import axios from "axios";
 
 const createUser = async (token) => {
@@ -35,8 +35,7 @@ const App = () => {
   const handleSetUser = (user) => {
     setUser(user);
     // Assuming you have retrieved the JWT from the server and stored it in a variable called `jwt`
-    console.log("user", user);
-    Cookies.set("jwt", JSON.stringify(user), { expires: 7 }); // Set the cookie to expire after 7 days
+    Cookies.set("jwt", JSON.stringify(user), { expires: 1 , secure: true, sameSite: 'strict' }); // Set the cookie to expire after 7 days
   };
   useEffect(() => {
     if (jwt) {
@@ -51,15 +50,19 @@ const App = () => {
 
   const handleLogout = () => {
     setUser(null);
-    Cookies.set("jwt", JSON.stringify(null), { expires: 0 }); // Set the cookie to expire after 7 days
+    Cookies.set("jwt", JSON.stringify(null), { expires: 0 , secure: true, sameSite: 'strict' }); // 
   };
 
   return (
     <BrowserRouter>
-      <header className="w-full flex justify-between items-center bg-white sm:px-8 px-4 py-4 border-b border-b-[#e6ebf4]">
+      <header className="w-full flex justify-between items-center bg-white sm:px-8 px-4 py-4 border-b border-b-[#e6ebf4] z-50 relative">
         <Link to="/">
-          <img src={logo} alt="logo" className="w-28 object-contain" />
+          <img src=""></img>
+        <h1 className="font-extrabold text-[#000000] text-[24px]">
+            ASSET_AI
+          </h1>
         </Link>
+        
         {user ? (
           <button
             onClick={() => {
@@ -80,12 +83,10 @@ const App = () => {
                 onClick={renderProps.onClick}
                 style={{ backgroundColor: "red", color: "white" }}
               >
-                dqowijdoqwi
                 <i className="material-symbols-outlined">person</i>
               </button>
             )}
             onSuccess={(credentialResponse) => {
-              console.log(credentialResponse);
               handleSetUser(credentialResponse);
               createUser(credentialResponse);
             }}
@@ -96,7 +97,15 @@ const App = () => {
             shape="circle"
           />
         )}
+        
         <div className="flex">
+        <Link
+            to="/display-posts"
+            className="font-inter font-medium bg-[#a65dd6] text-white px-4 py-2 rounded-md ml-2 flex-row flex h-fit"
+          >
+            <i className="material-symbols-outlined ">Image</i>
+            <span class="hidden xs:inline">Community</span>
+          </Link>
           <Link
             to="/create-post"
             className="font-inter font-medium bg-[#a65dd6] text-white px-4 py-2 rounded-md ml-2 flex-row flex h-fit"
@@ -120,6 +129,7 @@ const App = () => {
           <Route path="/create-post" element={<CreatePost user={user} />} />
           <Route path="/posts/:id" element={<Post user={user} />} />
           <Route path="/account" element={<Account user={user} />} />
+          <Route path="/display-posts" element={<Display user={user} />} />
         </Routes>
       </main>
     </BrowserRouter>

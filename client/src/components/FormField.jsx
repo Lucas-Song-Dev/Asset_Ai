@@ -9,15 +9,17 @@ const FormField = ({
   handleChange,
   isSurpriseMe,
   handleSurpriseMe,
+  icon,
 }) => (
   <div>
-    <div className="flex items-center gap-2 mb-2">
+    <div className="flex w-full items-center gap-2 mb-2 relative">
       <label
         htmlFor={name}
         className="block text-sm font-medium text-gray-900"
       >
         {labelName}
       </label>
+      
       {isSurpriseMe && (
         <button
           type="button"
@@ -27,12 +29,13 @@ const FormField = ({
           Surprise me
         </button>
       )}
+      <i className="material-symbols-outlined absolute mt-16 ml-2">{icon}</i>
     </div>
     <input
       type={type}
       id={name}
       name={name}
-      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#6469ff] focus:border-[#6469ff] outline-none block w-full p-3"
+      className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#a65dd6] focus:border-[#a65dd6] outline-none block w-full p-3"
       placeholder={placeholder}
       value={value}
       onChange={handleChange}

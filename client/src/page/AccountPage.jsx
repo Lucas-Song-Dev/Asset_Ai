@@ -35,7 +35,8 @@ function AccountPage(props) {
 
   useEffect(() => {
     props.user ? fetchPosts() : "";
-  }, []);
+    console.log(allPosts);
+  }, [props.user]);
 
   const RenderCards = ({ data, title }) => {
     if (data?.length > 0) {

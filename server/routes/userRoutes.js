@@ -54,7 +54,6 @@ router.post("/signup", async (req, res) => {
     console.log("User created successfully");
 
     // Set the user state
-    setUser(googleUser);
 
     return res.status(200).json({ message: "User created successfully" });
   } catch (err) {

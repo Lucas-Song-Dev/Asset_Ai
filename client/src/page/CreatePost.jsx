@@ -1,35 +1,64 @@
 import React, { useState, useEffect } from "react";
 // import { format } from "date-fns";
 
-
 import { useNavigate } from "react-router-dom";
 
 import { preview } from "../assets";
 import { getRandomPrompt } from "../utils";
-import { FormField, Loader } from "../components";
+import { FormField, Loader,Image } from "../components";
 
 import Success from "../components/Success";
+import LoginAlert from "../components/LoginAlert";
 import "./Post.css";
 
 const CreatePost = (props) => {
   const navigate = useNavigate();
-  console.log(props);
 
   // const [currentDate, setCurrentDate] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showLoginAlert, setShowLoginAlert] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const headers = {
+          "Content-Type": "application/json",
+          token: props.user.credential,
+        };
+
+        const response = await fetch(
+          "https://dallehost.herokuapp.com/api/v1/users/user",
+          {
+            method: "GET",
+            headers,
+          }
+        );
+
+        const data = await response.json();
+        setUserInfo(data.user);
+        setForm({ ...form, name: data.user.name });
+      } catch (err) {
+        alert(err);
+      }
+    };
+
+    props.user ? fetchUser() : setUserInfo(null);
+  }, [props.user]);
 
   const handleOk = () => {
     setShowSuccess(false);
-    console.log(props);
-    // navigate("/");
   };
 
-  // useEffect(() => {
-  //   setCurrentDate(format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-  // }, []);
+  const handleDismiss = () => {
+    setShowLoginAlert(false);
+  };
+
+  console.log(userInfo?.name)
 
   const [form, setForm] = useState({
-    name: "",
+    name: `${userInfo?.name}` || "",
     prompt: "",
     photo: "",
   });
@@ -43,6 +72,11 @@ const CreatePost = (props) => {
     const randomPrompt = getRandomPrompt(form.prompt);
     setForm({ ...form, prompt: randomPrompt });
   };
+
+  const handleClose = () => {
+    setForm({ ...form, photo: "" });
+  }
+
 
   const generateImage = async () => {
     if (form.prompt) {
@@ -87,7 +121,7 @@ const CreatePost = (props) => {
           {
             method: "POST",
             headers,
-            body: JSON.stringify({...form, token: props.user.credential}),
+            body: JSON.stringify({ ...form, token: props.user.credential }),
           }
         );
 
@@ -100,32 +134,25 @@ const CreatePost = (props) => {
         setLoading(false);
       }
     } else if (!props.user) {
-      alert("Please login to create a post");
+      setShowLoginAlert(true);
     } else {
       alert("Please generate an image with proper details");
     }
   };
   return (
-    <section className="max-w-7xl mx-auto">
-      <div>
-        <h1 className="font-extrabold text-[#222328] text-[32px]">Create</h1>
-        <p className="mt-2 text-[#666e75] text-[14px] max-w-[500px]">
-          Generate an imaginative image through DALL-E AI and share it with the
-          community
-        </p>
-      </div>
+    <section className=" flex flex-col w-full justify-center h-full" style={{ }}>
+      <div className="flex mt-8 ml-16 md:flex-row flex-col">
+          <h1 className="font-extrabold text-[#222328] text-[48px]">
+            CREATE
+          </h1>
+          <h1 className="ml-3 font-extrabold text-[#a65dd6] text-[48px]">
+            {" "}
+            ANYTHING
+          </h1>
+        </div>
 
-      <form className="mt-16 max-w-3xl" onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-5">
-          <FormField
-            labelName="Display Name"
-            type="text"
-            name="name"
-            placeholder="Ex., john doe"
-            value={form.name}
-            handleChange={handleChange}
-          />
-
+      <form className="mt-8 w-full items-center flex flex-col justify-center" onSubmit={handleSubmit}>
+        <div className="flex flex-col w-full gap-5 justify-center">
           <FormField
             labelName="Prompt"
             type="text"
@@ -136,30 +163,18 @@ const CreatePost = (props) => {
             isSurpriseMe
             handleSurpriseMe={handleSurpriseMe}
           />
-
-          <div className="relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center">
             {form.photo ? (
-              <img
-                src={form.photo}
-                alt={form.prompt}
-                className="w-full h-full object-contain"
-              />
+              <Image props={{...form, loading}} handleClose={handleClose} handleSubmit={handleSubmit}/>
             ) : (
-              <img
-                src={preview}
-                alt="preview"
-                className="w-9/12 h-9/12 object-contain opacity-40"
-              />
+              ""
             )}
 
             {generatingImg && (
-              <div className="absolute inset-0 z-0 flex justify-center items-center bg-[rgba(0,0,0,0.5)] rounded-lg">
+              <div className="absolute inset-0 flex justify-center items-center bg-[rgba(0,0,0,0.5)] rounded-lg z-50">
                 <Loader />
               </div>
             )}
           </div>
-        </div>
-        {/**() => navigate("/login")**/}
         {showSuccess && <Success handleOk={handleOk} />}
         <div className="mt-5 flex gap-5">
           <button
@@ -170,20 +185,8 @@ const CreatePost = (props) => {
             {generatingImg ? "Generating..." : "Generate"}
           </button>
         </div>
-
-        <div className="mt-10">
-          <p className="mt-2 text-[#666e75] text-[14px]">
-            ** Once you have created the image you want, you can share it with
-            others in the community **
-          </p>
-          <button
-            type="submit"
-            className="mt-3 text-white bg-[#a65dd6] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-          >
-            {loading ? "Sharing..." : "Share with the Community"}
-          </button>
-        </div>
       </form>
+      {showLoginAlert && <LoginAlert onDismiss={handleDismiss} />}
     </section>
   );
 };
