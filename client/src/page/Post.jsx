@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useParams ,useNavigate} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import DeleteConfirmation from "../components/DeleteConfirmation";
 import useIsOwner from "../state/hooks/IsOwner";
+import { Loader } from "../components";
+import moment from "moment";
 
 import "./Post.css";
 
 const Post = (props) => {
+  const createdAt = moment().format("MMMM Do YYYY");
   const navigate = useNavigate();
   const { id } = useParams();
   const [post, setPost] = useState(null);
+  const [showInfo, setShowInfo] = useState(true);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const isOwner = useIsOwner(props);
 
@@ -60,27 +64,63 @@ const Post = (props) => {
       {post ? (
         <>
           {!post.success ? (
-            <div> Please Try Again Later</div>
+            <div className="title"> No Post Found </div>
           ) : (
             <div className="page">
-              <div className="titleHolder">
-                <h1 className="title">{post.data.prompt}</h1>
-                <div className="itemDescription">
-                  <p class="font-bold text-center">Creator: {post.data.name}</p>
-                  {isOwner? (
-                    <button
-                      class="px-4 py-2 bg-red-500 text-white rounded m-1"
-                      onClick={() => setShowDeleteConfirmation(true)}
-                    >
-                      Delete
-                    </button>
-                  ) : (
-                    <div class="px-4 py-2 bg-red-500 text-white rounded m-1 text-center">
-                      Sign in to manage
+              <button
+                className="font-inter font-medium text-black px-4 py-2 rounded-md flex-row flex h-fit mb-4 mt-0 w-full border-t-2 border-b-2"
+                onClick={() => setShowInfo(!showInfo)}
+              >
+                <div className="">SHOW INFORMATION</div>
+              </button>
+              {showInfo ? (
+                <div
+                  className="titleHolder fixed z-50 bottom-0"
+                  style={{
+                    background: " rgb(255,255,255)",
+                    background:
+                      "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.8) 80%,  rgba(255,255,255,0.4) 90%, rgba(255,255,255,0) 100%)",
+                  }}
+                >
+                  <div className="flex flex-col bottom-0">
+                    <h1 className="title text-[32px] pt-2 pb-2">
+                      {post.data.prompt}
+                    </h1>
+                    <div className="grid grid-cols-3 bottom-0 mb-8 gap-3 h-2">
+                      <div className="w-full">
+                        <div>Model Version</div>
+                        <div className="opacity-80 text-blue-500">2.0</div>{" "}
+                      </div>
+                      <div className="w-full">
+                        <div>Model Name</div>
+                        <div className="opacity-80 text-blue-500">
+                          DALL-E
+                        </div>{" "}
+                      </div>
+                      <div className="w-full col-span-1">
+                        <div>Creator</div>
+                        <div className="opacity-80 text-blue-500">
+                          {post.data.name}
+                        </div>{" "}
+                      </div>
                     </div>
-                  )}
+                  </div>
+                  <div className="itemDescription">
+                    {isOwner ? (
+                      <button
+                        class="px-4 py-2 bg-red-500 text-white rounded m-1"
+                        onClick={() => setShowDeleteConfirmation(true)}
+                      >
+                        Delete
+                      </button>
+                    ) : (
+                      ""
+                    )}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                ""
+              )}
               <div className="imageHolder">
                 <img
                   style={{ gridColumnStart: "2" }}
@@ -93,7 +133,9 @@ const Post = (props) => {
           )}
         </>
       ) : (
-        <p>Loading...</p>
+        <div className="w-full h-10 flex flex-col items-center justify-center">
+          <Loader />
+        </div>
       )}
     </div>
   );

@@ -35,7 +35,11 @@ const App = () => {
   const handleSetUser = (user) => {
     setUser(user);
     // Assuming you have retrieved the JWT from the server and stored it in a variable called `jwt`
-    Cookies.set("jwt", JSON.stringify(user), { expires: 1 , secure: true, sameSite: 'strict' }); // Set the cookie to expire after 7 days
+    Cookies.set("jwt", JSON.stringify(user), {
+      expires: 1,
+      secure: true,
+      sameSite: "strict",
+    }); // Set the cookie to expire after 7 days
   };
   useEffect(() => {
     if (jwt) {
@@ -50,7 +54,11 @@ const App = () => {
 
   const handleLogout = () => {
     setUser(null);
-    Cookies.set("jwt", JSON.stringify(null), { expires: 0 , secure: true, sameSite: 'strict' }); // 
+    Cookies.set("jwt", JSON.stringify(null), {
+      expires: 0,
+      secure: true,
+      sameSite: "strict",
+    }); //
   };
 
   return (
@@ -58,11 +66,10 @@ const App = () => {
       <header className="w-full flex justify-between items-center bg-white sm:px-8 px-4 py-4 border-b border-b-[#e6ebf4] z-50 relative">
         <Link to="/">
           <img src=""></img>
-        <h1 className="font-extrabold text-[#000000] text-[24px]">
-            ASSET_AI
-          </h1>
+          <h1 className="hidden md:inline font-extrabold text-[#000000] text-[24px]">ASSET_AI</h1>
+          <h1 className="inline md:hidden font-extrabold text-[#000000] text-[24px]">AA</h1>
         </Link>
-        
+
         {user ? (
           <button
             onClick={() => {
@@ -75,9 +82,9 @@ const App = () => {
           </button>
         ) : (
           <GoogleLogin
-          theme="outline"
-          text="signin"
-          width="100px"
+            theme="outline"
+            text="signin"
+            width="100px"
             render={(renderProps) => (
               <button
                 onClick={renderProps.onClick}
@@ -93,13 +100,12 @@ const App = () => {
             onError={() => {
               console.log("Login Failed");
             }}
-            
             shape="circle"
           />
         )}
-        
+
         <div className="flex">
-        <Link
+          <Link
             to="/display-posts"
             className="font-inter font-medium bg-[#a65dd6] text-white px-4 py-2 rounded-md ml-2 flex-row flex h-fit"
           >
